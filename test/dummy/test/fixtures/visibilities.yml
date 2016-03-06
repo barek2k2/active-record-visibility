@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  visible_id: 1
+  visible_type: MyString
+  visible_attribute: MyString
+  is_visible: false
+
+two:
+  visible_id: 1
+  visible_type: MyString
+  visible_attribute: MyString
+  is_visible: false

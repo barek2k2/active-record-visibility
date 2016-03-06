@@ -1,0 +1,3 @@
+require 'active_record_visibility/has_visibility'
+module ActiveRecordVisibility
+end

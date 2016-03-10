@@ -1,5 +1,5 @@
 = ActiveRecordVisibility
 
-# A ruby gem for Rails application to manage and control visibility of any active record object or any attribute any active record object
+A ruby gem for Rails application to manage and control visibility of any active record object or any attribute of any active record object
 
 This project rocks and uses MIT-LICENSE.

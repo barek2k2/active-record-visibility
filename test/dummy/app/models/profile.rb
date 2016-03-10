@@ -1,3 +1,3 @@
 class Profile < ActiveRecord::Base
-  has_visibility :attributes => [:location]
+  has_visibility
 end

@@ -29,4 +29,7 @@ ActiveRecord::Schema.define(version: 20160306095107) do
     t.datetime "updated_at",                       null: false
   end
 
+  add_index "visibilities", ["visible_id", "visible_type", "visible_attribute"], name: "index_visible_attr"
+  add_index "visibilities", ["visible_id", "visible_type"], name: "index_visible"
+
 end

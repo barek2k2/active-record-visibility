@@ -19,34 +19,45 @@ module ActiveRecordVisibility
 
     module InstanceMethods
       # Checks whether the attribute or object is visible or not
-      def visible?(attribute=nil)
+      def visible?(attribute=nil, current_user=nil)
         hash = generate_hash_for_conditions(attribute)
         visibility = Visibility.where(hash).first
-        return true if visibility.nil?
-        visibility.is_visible?
+        if visibility && visibility.visibility_accesses.any?
+          return false unless current_user
+          return visibility.visibility_accesses.where(:user_id => current_user).any?
+        else
+          return true if visibility.nil?
+          visibility.is_visible?
+        end
       end
 
       # Checks whether the attribute or object is invisible or not
-      def invisible?(attribute=nil)
+      def invisible?(attribute=nil,current_user=nil)
         !visible?(attribute)
       end
 
-      # Shows the attribute or object from visibility
-      def invisible(attribute=nil)
+      # Hides the attribute or object from visibility
+      def invisible(attribute=nil,users=[])
         hash = generate_hash_for_conditions(attribute)
         visibility = Visibility.find_or_create_by(hash)
-        visibility.update_attribute(:is_visible, false)
+        users.each do |user|
+          VisibilityAccess.find_by(visibility: visibility, user: user).destroy
+        end
+        visibility.update_attribute(:is_visible, false) if users.empty?
       end
 
-      # Hides the attribute or object from visibility
-      def visible(attribute=nil)
+      # Shows the attribute or object from visibility
+      def visible(attribute=nil,users=[])
         hash = generate_hash_for_conditions(attribute)
         visibility = Visibility.find_or_create_by(hash)
+        users.each do |user|
+          VisibilityAccess.create(visibility: visibility, user: user)
+        end
         visibility.update_attribute(:is_visible, true)
       end
 
       private
-      def generate_hash_for_conditions(attribute)
+      def generate_hash_for_conditions(attribute=nil)
         hash = {visible_id: self.id, visible_type: self.class}
         hash.merge!({visible_attribute: attribute}) if attribute
         hash

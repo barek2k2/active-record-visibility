@@ -11,11 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160306095107) do
+ActiveRecord::Schema.define(version: 20160319051757) do
 
   create_table "profiles", force: :cascade do |t|
     t.string   "name"
     t.string   "location"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -29,7 +35,15 @@ ActiveRecord::Schema.define(version: 20160306095107) do
     t.datetime "updated_at",                       null: false
   end
 
-  add_index "visibilities", ["visible_id", "visible_type", "visible_attribute"], name: "index_visible_attr"
-  add_index "visibilities", ["visible_id", "visible_type"], name: "index_visible"
+  create_table "visibility_accesses", force: :cascade do |t|
+    t.integer  "visibility_id"
+    t.integer  "user_id"
+    t.string   "access"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "visibility_accesses", ["visibility_id", "user_id"], name: "index_visibility_accesses_on_visibility_id_and_user_id"
+  add_index "visibility_accesses", ["visibility_id"], name: "index_visibility_accesses_on_visibility_id"
 
 end

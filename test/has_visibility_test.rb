@@ -47,5 +47,22 @@ class VisibilityTest < ActiveSupport::TestCase
     assert_equal 3, profile.visibilities.count
   end
 
+  def test_should_create_visibility_for_specific_users
+    profile = Profile.create(:name => 'test name', :location => "test location")
+    user1 = User.create(:email => "test@gmail.com")
+    user2 = User.create(:email => "test@yahoo.com")
+    user3 = User.create(:email => "test@ymail.com")
+    profile.visible(nil,[user1,user2])
+    assert profile.visible?(nil,user1)
+    assert profile.visible?(nil,user2)
+    assert_not profile.visible?(nil,user3)
+
+    profile.invisible(nil,[user1])
+    assert_not profile.visible?(nil,user1)
+    assert profile.visible?(nil,user2)
+    assert_not profile.visible?(nil,user3)
+
+  end
+
 
 end
